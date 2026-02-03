@@ -39,13 +39,13 @@ Nyní, když jsme připojili modul ESP8266 k Arduinu, je čas odeslat speciáln�
 Celý seznam AT příkazů je ohromující. Pro náš účel, kterým je připojení k internetu, potřebujeme pouze specifickou sadu AT příkazů. Podrobnější vysvětlení každého příkazu naleznete v našem [seznamu AT příkazů ESP8266](https://www.teachmemicro.com/esp8266-wifi-command-list/).
 
 |příkaz|popis funkce či parametrizace|
-|:----------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| AT+CIPMUX = 1 |  Povolte jedno (0) nebo více připojení (1) k webovému serveru. Více připojení je dobrou volbou, pokud opakovaně odesíláte nebo čtete data z internetu. |
-| AT+CWMODE = 3 |  Nastavení režimu WiFi: 1 je režim stanice (ESP8266 je klient), 2 je režim AP (ESP8266 funguje jako WiFi router, ke kterému se může připojit váš telefon nebo počítač), 3 je režim AP+stanice (ESP8266 dělá obojí)  |
+|:----------------------:| :--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AT+CIPMUX = 1 |Povolte jedno (0) nebo více připojení (1) k webovému serveru. Více připojení je dobrou volbou, pokud opakovaně odesíláte nebo čtete data z internetu. |
+| AT+CWMODE = 3 |Nastavení režimu WiFi: 1 je režim stanice (ESP8266 je klient), 2 je režim AP (ESP8266 funguje jako WiFi router, ke kterému se může připojit váš telefon nebo počítač), 3 je režim AP+stanice (ESP8266 dělá obojí)  |
 |  AT+CWJAP = „<vaše-ssid>“, „<vaše-heslo>“ | Připojte se k Wi-Fi. Zadejte název SSID a heslo v uvozovkách.   |
-|  AT+CIFSR | Toto vrátí IP adresu modulu, což znamená, že se úspěšně připojil k vašemu WiFi routeru.   |
-|  AT+CIPSTART=0, „TCP“ „www.teachmemicro.com“, „80“ | Spuštění TCP nebo UDP připojení. První parametr (0) je zde ID připojení, „TCP“ znamená, že používáme TCP místo UDP, následuje adresa (nebo IP) webového serveru a nakonec číslo portu.   |
-| AT+CIPSEND=0,16 |  Příkaz, který informuje modul o připravenosti dat k odeslání. „0“ je ID připojení a 16 je délka odesílaných dat. Po tomto příkazu ESP8266 odpoví znakem „>“, který nám sděluje, že čeká na odeslání dat. V případě úspěchu modul odpoví „SEND OK“. „0“ je ID připojení a 16 je délka odesílaných dat. Po tomto příkazu ESP8266 odpoví znakem „>“, který nám sděluje, že čeká na odeslání dat. V případě úspěchu modul odpoví „SEND OK“. |
+|  AT+CIFSR |Toto vrátí IP adresu modulu, což znamená, že se úspěšně připojil k vašemu WiFi routeru.   |
+|  AT+CIPSTART=0, „TCP“,„www.teachmemicro.com“, „80“ | Spuštění TCP nebo UDP připojení. První parametr (0) je zde ID připojení, „TCP“ znamená, že používáme TCP místo UDP, následuje adresa (nebo IP) webového serveru a nakonec číslo portu.   |
+| AT+CIPSEND=0,16 |Příkaz, který informuje modul o připravenosti dat k odeslání. „0“ je ID připojení a 16 je délka odesílaných dat. Po tomto příkazu ESP8266 odpoví znakem „>“, který nám sděluje, že čeká na odeslání dat. V případě úspěchu modul odpoví „SEND OK“. |
 | „Data k odeslání“ | Řetězcová data, která mají být odeslána.   |
 
 Všimněte si, že tyto příkazy musí být odeslány ve správném pořadí z Arduina do modulu ESP8266.
