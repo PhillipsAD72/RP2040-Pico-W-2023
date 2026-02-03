@@ -3,7 +3,7 @@
 
 [ESP8266](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#) se stal požehnáním pro výrobce, kteří potřebují levně připojit své Arduino k internetu. Desky jako NodeMCU a WeMos, které obsahují modul ESP , se staly nesmírně populárními. To není překvapivé, vzhledem k tomu, že tyto desky mohou nahradit Arduino bez náročného učení.
 
-Takže pokud se s programováním na Arduinu vyznáte a chcete odesílat nebo přijímat data přes internet, doporučuji použít NodeMCU. Vlastně jsem již napsal několik článků o tom, jak to udělat:
+Takže pokud se v programování Arduina vyznáte a chcete odesílat nebo přijímat data přes internet, doporučuji použít NodeMCU. Vlastně jsem již napsal několik článků o tom, jak to udělat:
 
 -   [Úvod do NodeMCU a Arduino IDE](https://www.teachmemicro.com/intro-nodemcu-arduino/)
 -   [Vytvoření jednoduchého webového serveru NodeMCU](https://www.teachmemicro.com/simple-nodemcu-web-server/)
@@ -17,29 +17,29 @@ Takže pokud se s programováním na Arduinu vyznáte a chcete odesílat nebo p�
 
 Pokud si ale nechcete NodeMCU kupovat a chcete se držet klasického modulu ESP8266, pak je tento tutoriál o Arduinu WiFi určen právě vám.
 
--   [Zapojení Arduina k ESP8266](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#Wiring_the_Arduino_to_the_ESP8266)
--   [AT příkazy](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#AT_Commands)
--   [Příklad náčrtu WiFi pro Arduino](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#Arduino_WiFi_Sketch_Example)
--   [Odeslání dat na webovou stránku](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#Send_Data_to_a_Web_Page)
-    -   -   [Odesílání dat prostřednictvím POST požadavku](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#Sending_Data_via_POST_Request)
--   [To je ono!](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#Thats_It)
+-   [Zapojení Arduina k ESP8266](#zapojen%C3%AD-arduina-k-esp8266)
+-   [AT příkazy](#at-p%C5%99%C3%ADkazy)
+-   [Příklad náčrtu WiFi pro Arduino](#p%C5%99%C3%ADklad-n%C3%A1%C4%8Drtu-wifi-pro-arduino)
+-   [Odeslání dat na webovou stránku](#odesl%C3%A1n%C3%AD-dat-na-webovou-str%C3%A1nku)
+    -   [Odesílání dat prostřednictvím POST požadavku](#odes%C3%ADl%C3%A1n%C3%AD-dat-prost%C5%99ednictv%C3%ADm-post-po%C5%BEadavku)
+-   [To je ono!](#to-je-ono)
 
 ### **Zapojení Arduina k ESP8266**
 
 Jak víte, Arduino UNO, Mega nebo Nano nemá žádné síťové funkce. Pro připojení Arduina k internetu potřebuje modem. Modul ESP8266 bude fungovat jako náš modem a naváže spojení s vaším WiFi routerem za účelem odesílání/přijímání dat na web/z webu.
 
-![](https://www.teachmemicro.com/wp-content/uploads/2018/12/img_5c244896a0bb4.png)
+![Schéma připojení ESP k Arduinu](https://www.teachmemicro.com/wp-content/uploads/2018/12/img_5c244896a0bb4.png)
 
 Modul ESP8266, konkrétně modul ESP-01, běží na 3,3 V. Proto nesmíme výstupní piny Arduina připojovat přímo k pinům ESP8266. Ve výše uvedeném diagramu jsem použil jednoduchý dělič napětí ke snížení logických úrovní 5 V. Všimněte si také, že pro správný chod modulu ESP8266 musí mít vlastní zdroj napájení 3,3 V a 250 mA. To představuje další nevýhodu tohoto nastavení: musíte mít další zdroj, místo abyste používali pouze USB port počítače.
 
 ### **AT příkazy**
 
-Nyní, když jsme připojili modul ESP8266 k Arduinu, je čas odeslat speciální příkazy přes sériový port Arduina (  [softwarový](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#) ). Tyto AT nebo Hayesovy příkazy jsou sadou příkazů používaných nejen ESP8266, ale i jinými modemy, jako jsou [GSM](https://www.teachmemicro.com/arduino-gsm800l-tutorial/) , [Bluetooth](https://www.teachmemicro.com/hc-05-bluetooth-command-list/) a [GPRS](https://www.teachmemicro.com/arduino-gprs/) .
+Nyní, když jsme připojili modul ESP8266 k Arduinu, je čas odeslat speciální příkazy přes sériový port Arduina ([softwarový](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#)). Tyto AT nebo Hayesovy příkazy jsou sadou příkazů používaných nejen ESP8266, ale i jinými modemy, jako jsou [GSM](https://www.teachmemicro.com/arduino-gsm800l-tutorial/), [Bluetooth](https://www.teachmemicro.com/hc-05-bluetooth-command-list/) a [GPRS](https://www.teachmemicro.com/arduino-gprs/).
 
-Celý seznam AT příkazů je ohromující. Pro náš účel, kterým je připojení k internetu, potřebujeme pouze specifickou sadu AT příkazů. Podrobnější vysvětlení každého příkazu naleznete v našem [seznamu AT příkazů ESP8266](https://www.teachmemicro.com/esp8266-wifi-command-list/) .
+Celý seznam AT příkazů je ohromující. Pro náš účel, kterým je připojení k internetu, potřebujeme pouze specifickou sadu AT příkazů. Podrobnější vysvětlení každého příkazu naleznete v našem [seznamu AT příkazů ESP8266](https://www.teachmemicro.com/esp8266-wifi-command-list/).
 
-|||
-|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+|příkaz|popis funkce či parametrizace|
+|:----------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | AT+CIPMUX = 1 |  Povolte jedno (0) nebo více připojení (1) k webovému serveru. Více připojení je dobrou volbou, pokud opakovaně odesíláte nebo čtete data z internetu. |
 | AT+CWMODE = 3 |  Nastavení režimu WiFi: 1 je režim stanice (ESP8266 je klient), 2 je režim AP (ESP8266 funguje jako WiFi router, ke kterému se může připojit váš telefon nebo počítač), 3 je režim AP+stanice (ESP8266 dělá obojí)  |
 |  AT+CWJAP = „<vaše-ssid>“, „<vaše-heslo>“ | Připojte se k Wi-Fi. Zadejte název SSID a heslo v uvozovkách.   |
