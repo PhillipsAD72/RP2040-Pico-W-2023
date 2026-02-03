@@ -1,28 +1,29 @@
 # Arduino WiFi: Použití ESP8266 s AT příkazy
+
 **Aktualizováno:** 14. října 2023 (překlad článku z https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/)
 
 [ESP8266](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#) se stal požehnáním pro výrobce, kteří potřebují levně připojit své Arduino k internetu. Desky jako NodeMCU a WeMos, které obsahují modul ESP , se staly nesmírně populárními. To není překvapivé, vzhledem k tomu, že tyto desky mohou nahradit Arduino bez náročného učení.
 
 Takže pokud se v programování Arduina vyznáte a chcete odesílat nebo přijímat data přes internet, doporučuji použít NodeMCU. Vlastně jsem již napsal několik článků o tom, jak to udělat:
 
--   [Úvod do NodeMCU a Arduino IDE](https://www.teachmemicro.com/intro-nodemcu-arduino/)
--   [Vytvoření jednoduchého webového serveru NodeMCU](https://www.teachmemicro.com/simple-nodemcu-web-server/)
--   [Zobrazení dat ze senzorů na webovém serveru NodeMCU](https://www.teachmemicro.com/display-sensor-data-nodemcu-web-server/)
--   [Protokolování dat pomocí NodeMCU a Tabulek Google](https://www.teachmemicro.com/log-data-nodemcu-google-sheets/)
--   [NodeMCU Ajax: Dynamická data ze senzorů na webové stránce](https://www.teachmemicro.com/nodemcu-ajax-dynamic-sensor-data-web-page/)
--   [Výukový program NodeMCU MQTT](https://www.teachmemicro.com/nodemcu-mqtt-tutorial/)
--   [Webový server s NodeMCU WebSocketem](https://www.teachmemicro.com/web-server-nodemcu-websocket/)
--   [Vytváření přístupového bodu WiFi NodeMCU](https://www.teachmemicro.com/nodemcu-wifi-access-point/)
--   [Referenční přípojka NodeMCU](https://www.teachmemicro.com/nodemcu-pinout/)
+- [Úvod do NodeMCU a Arduino IDE](https://www.teachmemicro.com/intro-nodemcu-arduino/)
+- [Vytvoření jednoduchého webového serveru NodeMCU](https://www.teachmemicro.com/simple-nodemcu-web-server/)
+- [Zobrazení dat ze senzorů na webovém serveru NodeMCU](https://www.teachmemicro.com/display-sensor-data-nodemcu-web-server/)
+- [Protokolování dat pomocí NodeMCU a Tabulek Google](https://www.teachmemicro.com/log-data-nodemcu-google-sheets/)
+- [NodeMCU Ajax: Dynamická data ze senzorů na webové stránce](https://www.teachmemicro.com/nodemcu-ajax-dynamic-sensor-data-web-page/)
+- [Výukový program NodeMCU MQTT](https://www.teachmemicro.com/nodemcu-mqtt-tutorial/)
+- [Webový server s NodeMCU WebSocketem](https://www.teachmemicro.com/web-server-nodemcu-websocket/)
+- [Vytváření přístupového bodu WiFi NodeMCU](https://www.teachmemicro.com/nodemcu-wifi-access-point/)
+- [Referenční přípojka NodeMCU](https://www.teachmemicro.com/nodemcu-pinout/)
 
 Pokud si ale nechcete NodeMCU kupovat a chcete se držet klasického modulu ESP8266, pak je tento tutoriál o Arduinu WiFi určen právě vám.
 
--   [Zapojení Arduina k ESP8266](#zapojen%C3%AD-arduina-k-esp8266)
--   [AT příkazy](#at-p%C5%99%C3%ADkazy)
--   [Příklad náčrtu WiFi pro Arduino](#p%C5%99%C3%ADklad-n%C3%A1%C4%8Drtu-wifi-pro-arduino)
--   [Odeslání dat na webovou stránku](#odesl%C3%A1n%C3%AD-dat-na-webovou-str%C3%A1nku)
-    -   [Odesílání dat prostřednictvím POST požadavku](#odes%C3%ADl%C3%A1n%C3%AD-dat-prost%C5%99ednictv%C3%ADm-post-po%C5%BEadavku)
--   [To je ono!](#to-je-ono)
+- [Zapojení Arduina k ESP8266](#zapojen%C3%AD-arduina-k-esp8266)
+- [AT příkazy](#at-p%C5%99%C3%ADkazy)
+- [Příklad náčrtu WiFi pro Arduino](#p%C5%99%C3%ADklad-n%C3%A1%C4%8Drtu-wifi-pro-arduino)
+- [Odeslání dat na webovou stránku](#odesl%C3%A1n%C3%AD-dat-na-webovou-str%C3%A1nku)
+  - [Odesílání dat prostřednictvím POST požadavku](#odes%C3%ADl%C3%A1n%C3%AD-dat-prost%C5%99ednictv%C3%ADm-post-po%C5%BEadavku)
+- [To je ono!](#to-je-ono)
 
 ### **Zapojení Arduina k ESP8266**
 
@@ -38,15 +39,15 @@ Nyní, když jsme připojili modul ESP8266 k Arduinu, je čas odeslat speciáln�
 
 Celý seznam AT příkazů je ohromující. Pro náš účel, kterým je připojení k internetu, potřebujeme pouze specifickou sadu AT příkazů. Podrobnější vysvětlení každého příkazu naleznete v našem [seznamu AT příkazů ESP8266](https://www.teachmemicro.com/esp8266-wifi-command-list/).
 
-|příkaz|popis funkce či parametrizace|
-|:----------------------:| :--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| AT+CIPMUX = 1 |Povolte jedno (0) nebo více připojení (1) k webovému serveru. Více připojení je dobrou volbou, pokud opakovaně odesíláte nebo čtete data z internetu. |
-| AT+CWMODE = 3 |Nastavení režimu WiFi: 1 je režim stanice (ESP8266 je klient), 2 je režim AP (ESP8266 funguje jako WiFi router, ke kterému se může připojit váš telefon nebo počítač), 3 je režim AP+stanice (ESP8266 dělá obojí)  |
-|  AT+CWJAP = „<vaše-ssid>“, „<vaše-heslo>“ | Připojte se k Wi-Fi. Zadejte název SSID a heslo v uvozovkách.   |
-|  AT+CIFSR |Toto vrátí IP adresu modulu, což znamená, že se úspěšně připojil k vašemu WiFi routeru.   |
-|  AT+CIPSTART=0, „TCP“,„www.teachmemicro.com“, „80“ | Spuštění TCP nebo UDP připojení. První parametr (0) je zde ID připojení, „TCP“ znamená, že používáme TCP místo UDP, následuje adresa (nebo IP) webového serveru a nakonec číslo portu.   |
-| AT+CIPSEND=0,16 |Příkaz, který informuje modul o připravenosti dat k odeslání. „0“ je ID připojení a 16 je délka odesílaných dat. Po tomto příkazu ESP8266 odpoví znakem „>“, který nám sděluje, že čeká na odeslání dat. V případě úspěchu modul odpoví „SEND OK“. |
-| „Data k odeslání“ | Řetězcová data, která mají být odeslána.   |
+| příkaz                                            | popis funkce či parametrizace                                                                                                                                                                                                                      |
+|:-------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AT+CIPMUX = 1                                     | Povolte jedno (0) nebo více připojení (1) k webovému serveru. Více připojení je dobrou volbou, pokud opakovaně odesíláte nebo čtete data z internetu.                                                                                              |
+| AT+CWMODE = 3                                     | Nastavení režimu WiFi: 1 je režim stanice (ESP8266 je klient), 2 je režim AP (ESP8266 funguje jako WiFi router, ke kterému se může připojit váš telefon nebo počítač), 3 je režim AP+stanice (ESP8266 dělá obojí)                                  |
+| AT+CWJAP = „<vaše-ssid>“, „<vaše-heslo>“          | Připojte se k Wi-Fi. Zadejte název SSID a heslo v uvozovkách.                                                                                                                                                                                      |
+| AT+CIFSR                                          | Toto vrátí IP adresu modulu, což znamená, že se úspěšně připojil k vašemu WiFi routeru.                                                                                                                                                            |
+| AT+CIPSTART=0, „TCP“,„www.teachmemicro.com“, „80“ | Spuštění TCP nebo UDP připojení. První parametr (0) je zde ID připojení, „TCP“ znamená, že používáme TCP místo UDP, následuje adresa (nebo IP) webového serveru a nakonec číslo portu.                                                             |
+| AT+CIPSEND=0,16                                   | Příkaz, který informuje modul o připravenosti dat k odeslání. „0“ je ID připojení a 16 je délka odesílaných dat. Po tomto příkazu ESP8266 odpoví znakem „>“, který nám sděluje, že čeká na odeslání dat. V případě úspěchu modul odpoví „SEND OK“. |
+| „Data k odeslání“                                 | Řetězcová data, která mají být odeslána.                                                                                                                                                                                                           |
 
 Všimněte si, že tyto příkazy musí být odeslány ve správném pořadí z Arduina do modulu ESP8266.
 
@@ -62,14 +63,14 @@ SoftwareSerial ESP8266(10, 11);  //RX,TX
 void setup()
 {
     Serial.begin(9600);     
- 
+
     // Start the software serial for communication with the ESP8266
     ESP8266.begin(9600);  //this assumes default baud rate is used by the module
- 
+
     Serial.println("");
     Serial.println("Ready"); 
 }
- 
+
 void loop()
 {
     Serial.println(“Establishing connection type…”);
@@ -104,15 +105,15 @@ Na serveru jsem vytvořil soubor „read.php“, který obsahuje toto:
 
 ```php
 <?php
- 
+
 $value = $_POST['value'];
- 
+
 $textfile = "values.txt"; // Declares the name and location of the .txt file
 $fileLocation = "$textfile";
 $fh = fopen($fileLocation, 'w') or die("Something went wrong!"); // Opens up the .txt file for writing and replaces any previous content
 fwrite($fh, $value); // Writes it to the .txt file
 fclose($fh);
- 
+
 ?>
 ```
 
@@ -124,29 +125,29 @@ Host: localhost
 User-Agent: Mozilla
 Content-Type: application/x-www-form-urlencoded
 Content-length: 9
- 
+
 value=500
 ```
 
 Dále musíme přimět  [Arduino](https://www.teachmemicro.com/arduino-wifi-using-esp8266-commands/#) , aby odeslalo tento POST požadavek přes modul ESP8266. Zde je návod, jak jsem to udělal:
 
-```c++
+```c
 #include <SoftwareSerial.h>
 
 SoftwareSerial ESP8266(10, 11);  //RX,TX
 
 void setup()
 {
-     
+
     Serial.begin(9600);     
- 
+
     // Start the software serial for communication with the ESP8266
     ESP8266.begin(9600);  //this assumes default baud rate is used by the module
- 
+
     Serial.println("");
     Serial.println("Ready"); 
 }
- 
+
 void loop()
 {
     int adcval = analogRead(A0);
@@ -184,13 +185,13 @@ Ještě nejsme hotovi! Potřebujeme další PHP soubor, abychom mohli zobrazit h
 
 ```php
 <!doctype html>
- 
+
 <html lang="en">
 <head>
   <title>Display Data from Arduino to Web</title>
  <meta http-equiv="refresh" content="5" >
 </head>
- 
+
 <body>
 <?php
 $textfile = "values.txt"; // Declares the name and location of the .txt file
